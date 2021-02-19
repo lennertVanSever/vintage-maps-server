@@ -3,6 +3,7 @@ import express from 'express';
 import printKey from './printKey.js';
 import uploadMap from './uploadMap.js';
 import modifyCountry from './modifyCountry.js';
+import modifyColors from './modifyColors.js';
 import cors from 'cors';
 
 const app = express()
@@ -14,6 +15,7 @@ app.use(cors())
 printKey(app);
 uploadMap(app);
 modifyCountry(app);
+modifyColors(app);
 app.get('/', function (req, res) {
   res.send('Hello World')
 })
