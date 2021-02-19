@@ -12,7 +12,7 @@ export default (app) => {
       const fileColors = JSON.parse(fs.readFileSync(filePath, {encoding:'utf8'}));
       
       fileColors[styleName] = colors;
-      fs.writeFileSync(filePath, JSON.stringify(fileColors));
+      fs.writeFileSync(filePath, JSON.stringify(fileColors, undefined, 2));
       res.status(200).send({ styleName, message: `succesfully updated ${styleName} on ${filePath}` });
     }
     catch(e) {
