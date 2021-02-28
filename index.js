@@ -5,6 +5,7 @@ import uploadMap from './uploadMap.js';
 import modifyCountry from './modifyCountry.js';
 import modifyColors from './modifyColors.js';
 import modifyCities from './modifyCities.js';
+import stripe from './stripe.js';
 import cors from 'cors';
 
 const app = express()
@@ -18,6 +19,7 @@ uploadMap(app);
 modifyCountry(app);
 modifyCities(app);
 modifyColors(app);
+stripe(app);
 app.get('/', function (req, res) {
   res.send('Hello World')
 })
