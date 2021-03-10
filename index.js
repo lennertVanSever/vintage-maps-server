@@ -3,6 +3,7 @@ import express from 'express';
 import printKey from './printKey.js';
 import uploadMap from './uploadMap.js';
 import modifyCountry from './modifyCountry.js';
+import modifyMountains from './modifyMountains.js';
 import modifyColors from './modifyColors.js';
 import modifyCities from './modifyCities.js';
 import stripe from './stripe.js';
@@ -19,6 +20,7 @@ uploadMap(app);
 modifyCountry(app);
 modifyCities(app);
 modifyColors(app);
+modifyMountains(app);
 stripe(app);
 app.get('/', function (req, res) {
   res.send('Hello World')
