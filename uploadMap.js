@@ -28,8 +28,12 @@ const getPdfCode = async (sejdaParameters) => {
       ...sejdaParameters
     })
   });
-  const response = await responseRaw.arrayBuffer();
-  return response;
+  if (responseRaw.status === 200) {
+    const response = await responseRaw.arrayBuffer();
+    return response;
+  }
+  const response = await responseRaw.text()
+  throw new Error(response);
 }
 
 const getUploadUrl = async () => {
@@ -60,25 +64,30 @@ const uploadFile = async ({ content }) => {
     },
     body: content,
   });
-
   const response = await responseRaw.json();
-  if (response.fileName) {
-    return `https://f000.backblazeb2.com/file/map-prints/${response.fileName}`;
+  if (responseRaw.status === 200) {
+    if (response.fileName) {
+      return `https://f000.backblazeb2.com/file/map-prints/${response.fileName}`;
+    }
   }
-  return response;
+  throw new Error(JSON.stringify(response));
 }
 
 export default (app) => {
-  app.post('/upload_map', async (req, res) => {
-    const {
-      body: {
-        sejdaParameters
-      }
-    } = req;
-    const content = await getPdfCode(sejdaParameters);
-    const fileLink = await uploadFile({ content });
-    res.send({
-      fileLink
-    })
+  app.post('/upload_map', async (req, res, next) => {
+    try {
+      const {
+        body: {
+          sejdaParameters
+        }
+      } = req;
+      const content = await getPdfCode(sejdaParameters);
+      const fileLink = await uploadFile({ content });
+      res.send({
+        fileLink
+      })
+    } catch(error) {
+      next(error);
+    }
   })
 }
