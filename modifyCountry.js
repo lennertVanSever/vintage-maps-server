@@ -6,24 +6,24 @@ export default (app) => {
     try {
       const {
         mapName,
-        countryName,
+        countryId,
         changeProperties
       } = req.body;
       const filePath = `../vintage-maps/maps/${mapName}.geojson`;
       const world = JSON.parse(fs.readFileSync(filePath, {encoding:'utf8'}));
       let selectedCountryIndex;
       
-      world.features.forEach(({ properties: { NAME }}, index) => {
-        if(NAME === countryName) {
+      world.features.forEach(({ properties: { ID }}, index) => {
+        if(ID === countryId) {
           selectedCountryIndex = index;
         }
       })
       if (!selectedCountryIndex) {
-        throw Error('country not found, provide correct `countryName`')
+        throw Error('country not found, provide correct `countryId`')
       }
       world.features[selectedCountryIndex].properties = changeProperties;
       fs.writeFileSync(filePath, JSON.stringify(world));
-      res.status(200).send({ countryName, message: `succesfully updated ${countryName} on ${filePath}` });
+      res.status(200).send({ countryId, message: `succesfully updated ${countryId} on ${filePath}` });
     }
     catch(e) {
       console.error(e);
