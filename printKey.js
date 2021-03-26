@@ -1,4 +1,5 @@
 import fetch from "node-fetch";
+import { throwErrorIfNotStatus200 } from './utils.js';
 
 const {
   PRINT_CLIENT_ID,
@@ -6,7 +7,7 @@ const {
 } = process.env;
 
 const fetchAuthorizationToken = async () => {
-  return fetch("https://test.printapi.nl/v2/oauth", {
+  const responseRaw = await fetch("https://test.printapi.nl/v2/oauth", {
     method: 'POST',
     headers: {
       "Content-Type": "application/x-www-form-urlencoded"
@@ -17,12 +18,19 @@ const fetchAuthorizationToken = async () => {
       'client_secret': PRINT_CLIENT_SECRET
     }),
   });
+  return throwErrorIfNotStatus200({
+    responseRaw,
+  });
 }
 
 export default (app) => {
-  app.get('/print_key', async (req, res) => {
-    const tokenRaw = await fetchAuthorizationToken();
-    const token = await tokenRaw.json();
-    res.status(tokenRaw.status).send(token);
+  app.get('/print_key', async (req, res, next) => {
+    try {
+      const tokenRaw = await fetchAuthorizationToken();
+      const token = await tokenRaw.json();
+      res.status(tokenRaw.status).send(token);
+    } catch(error) {
+      next(error);
+    }
   })
 }

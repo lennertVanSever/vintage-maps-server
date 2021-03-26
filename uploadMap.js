@@ -1,6 +1,7 @@
 import fetch from "node-fetch";
 import sha1 from 'js-sha1';
 import { v4 as uuid } from 'uuid';
+import { throwErrorIfNotStatus200 } from './utils.js';
 
 const {
   BACKBLAZE_USERNAME_PASSWORD,
@@ -28,12 +29,13 @@ const getPdfCode = async (sejdaParameters) => {
       ...sejdaParameters
     })
   });
-  if (responseRaw.status === 200) {
-    const response = await responseRaw.arrayBuffer();
-    return response;
-  }
-  const response = await responseRaw.text()
-  throw new Error(response);
+  return throwErrorIfNotStatus200({
+    responseRaw,
+    successCallback: async () => {      
+      const response = await responseRaw.arrayBuffer();
+      return response;
+    }
+  });
 }
 
 const getUploadUrl = async () => {
@@ -64,13 +66,15 @@ const uploadFile = async ({ content }) => {
     },
     body: content,
   });
-  const response = await responseRaw.json();
-  if (responseRaw.status === 200) {
-    if (response.fileName) {
-      return `https://f000.backblazeb2.com/file/map-prints/${response.fileName}`;
+  return throwErrorIfNotStatus200({
+    responseRaw,
+    successCallback: async () => {      
+      const response = await responseRaw.json();
+      if (response.fileName) {
+        return `https://f000.backblazeb2.com/file/map-prints/${response.fileName}`;
+      }
     }
-  }
-  throw new Error(JSON.stringify(response));
+  });
 }
 
 export default (app) => {
