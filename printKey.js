@@ -25,8 +25,7 @@ const fetchAuthorizationToken = async () => {
 
 export default (app) => {
   app.get('/print_key', async (req, res, next) => {
-    const tokenRaw = await fetchAuthorizationToken();
-    const token = await tokenRaw.json();
-    res.status(tokenRaw.status).send(token);
+    const token = await fetchAuthorizationToken();
+    res.send(token);
   })
 }
