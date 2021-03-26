@@ -79,19 +79,15 @@ const uploadFile = async ({ content }) => {
 
 export default (app) => {
   app.post('/upload_map', async (req, res, next) => {
-    try {
-      const {
-        body: {
-          sejdaParameters
-        }
-      } = req;
-      const content = await getPdfCode(sejdaParameters);
-      const fileLink = await uploadFile({ content });
-      res.send({
-        fileLink
-      })
-    } catch(error) {
-      next(error);
-    }
+    const {
+      body: {
+        sejdaParameters
+      }
+    } = req;
+    const content = await getPdfCode(sejdaParameters);
+    const fileLink = await uploadFile({ content });
+    res.send({
+      fileLink
+    })
   })
 }

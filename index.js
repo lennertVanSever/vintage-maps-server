@@ -9,6 +9,7 @@ import modifyCities from './modifyCities.js';
 import stripe from './stripe.js';
 import cors from 'cors';
 import { initializeSentry, forceLoggingErrors} from './sentry.js'
+import 'express-async-errors';
 
 const app = express()
 
