@@ -8,12 +8,14 @@ import modifyColors from './modifyColors.js';
 import modifyCities from './modifyCities.js';
 import stripe from './stripe.js';
 import cors from 'cors';
+import { initializeSentry, forceLoggingErrors} from './sentry.js'
 
 const app = express()
+
 const port = process.env.PORT || 9000;
 app.use(express.json({ limit: '100mb' }))
 app.use(cors())
-
+initializeSentry(app);
 
 printKey(app);
 uploadMap(app);
@@ -29,3 +31,5 @@ app.get('/', function (req, res) {
 app.listen(port, () => {
   console.log(`running on http://localhost:${port}`);
 })
+
+forceLoggingErrors(app);
