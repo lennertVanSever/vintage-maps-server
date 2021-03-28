@@ -29,7 +29,7 @@ export default (app) => {
         },
       ],
       mode: 'payment',
-      success_url: `${origin}/download-success${searchParameters}&pdfFile=${pdfFile}`,
+      success_url: `${origin}/download-success${searchParameters}`,
       cancel_url: `${origin}/download-fail${searchParameters}`,
     });
     res.json({ id: session.id });
