@@ -18,7 +18,7 @@ export default (app) => {
           selectedCountryIndex = index;
         }
       })
-      if (!selectedCountryIndex) {
+      if (!selectedCountryIndex && selectedCountryIndex !== 0) {
         throw Error('country not found, provide correct `countryId`')
       }
       world.features[selectedCountryIndex].properties = changeProperties;
