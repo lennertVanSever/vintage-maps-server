@@ -3,13 +3,10 @@ const stripe = new Stripe(process.env.STRIPE_KEY);
 
 
 export default (app) => {
-  app.post('/pay-downloaded-map', async (req, res, next) => {
+  app.post('/pay-downloaded-map', async (req, res) => {
     const {
-      headers: {
-        origin,
-      },
       body: {
-        pdfFile,
+        origin,
         searchParameters
       }
     } = req;
