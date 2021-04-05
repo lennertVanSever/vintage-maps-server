@@ -3,11 +3,12 @@ import { throwErrorIfNotStatus200 } from './utils.js';
 
 const {
   PRINT_CLIENT_ID,
-  PRINT_CLIENT_SECRET
+  PRINT_CLIENT_SECRET,
+  PRINT_ORIGIN
 } = process.env;
 
 const fetchAuthorizationToken = async () => {
-  const responseRaw = await fetch("https://test.printapi.nl/v2/oauth", {
+  const responseRaw = await fetch(`${PRINT_ORIGIN}/v2/oauth`, {
     method: 'POST',
     headers: {
       "Content-Type": "application/x-www-form-urlencoded"
@@ -26,6 +27,6 @@ const fetchAuthorizationToken = async () => {
 export default (app) => {
   app.get('/print_key', async (req, res, next) => {
     const token = await fetchAuthorizationToken();
-    res.send(token);
+    res.send({ ...token, api_url: PRINT_ORIGIN });
   })
 }
