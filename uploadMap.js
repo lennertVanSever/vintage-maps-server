@@ -84,6 +84,7 @@ export default (app) => {
         sejdaParameters
       }
     } = req;
+    console.log('sejdaParameters', sejdaParameters);
     const content = await getPdfCode(sejdaParameters);
     const fileLink = await uploadFile({ content });
     res.send({
