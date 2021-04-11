@@ -26,6 +26,8 @@ const fetchAuthorizationToken = async () => {
 
 export default (app) => {
   app.get('/print_key', async (req, res, next) => {
+    const now = new Date();
+    console.info('request href', req.headers['x-request-href'], now.toString());
     const token = await fetchAuthorizationToken();
     res.send({ ...token, api_url: PRINT_ORIGIN });
   })
